@@ -88,11 +88,32 @@ const AllocationForm = (props) => {
 
           <input
             required="required"
-            type="number"
+            type="text"
+            min={0}
             id="cost"
             value={cost}
             style={{ marginLeft: "2rem", size: 10 }}
-            onChange={(event) => setCost(event.target.value)}
+            onChange={(event) => {
+              const value = event.target.value;
+              const numberValue = parseInt(value);
+              const isValidNumber = /^[0-9]*$/.test(numberValue);
+
+              if (isValidNumber) {
+                if (parseInt(value) <= remaining) {
+                  setCost(value);
+                } else {
+                  alert(
+                    `The ${value} allocation cannot exceed remaining funds ${remaining}`
+                  );
+                  setCost("");
+                }
+              } else if (value === "") {
+                setCost(value);
+              } else {
+                alert("Please enter a valid number!");
+                setCost("");
+              }
+            }}
           ></input>
 
           <button
